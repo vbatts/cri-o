@@ -315,11 +315,11 @@ func DefaultConfig() *Config {
 			RunRoot:        storage.DefaultStoreOptions.RunRoot,
 			Storage:        storage.DefaultStoreOptions.GraphDriverName,
 			StorageOptions: storage.DefaultStoreOptions.GraphDriverOptions,
-			LogDir:         "/var/log/crio/pods",
+			LogDir:         defaultLogDir,
 			FileLocking:    true,
 		},
 		RuntimeConfig: RuntimeConfig{
-			Runtime:                  "/usr/bin/runc",
+			Runtime:                  defaultOCIRuntimePath,
 			RuntimeUntrustedWorkload: "",
 			DefaultWorkloadTrust:     "trusted",
 
