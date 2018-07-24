@@ -84,10 +84,10 @@ gofmt:
 	git diff --exit-code
 
 bin/conmon: conmon/config.h
-	$(MAKE) -C conmon
+	"$(MAKE)" -C conmon
 
 bin/pause:
-	$(MAKE) -C pause
+	"$(MAKE)" -C pause
 
 test/bin2img/bin2img: .gopathok $(wildcard test/bin2img/*.go)
 	$(GO) build -i $(LDFLAGS) -tags "$(BUILDTAGS) containers_image_ostree_stub" -o $@ $(PROJECT)/test/bin2img
@@ -122,8 +122,8 @@ endif
 	find . -name \#\* -delete
 	rm -f bin/crio
 	rm -f bin/crio.cross.*
-	$(MAKE) -C conmon clean
-	$(MAKE) -C pause clean
+	"$(MAKE)" -C conmon clean
+	"$(MAKE)" -C pause clean
 	rm -f test/bin2img/bin2img
 	rm -f test/copyimg/copyimg
 	rm -f test/checkseccomp/checkseccomp
@@ -132,7 +132,7 @@ endif
 # directly, is such that each target should try to build regardless if it
 # fails. And return a non-zero exit if _any_ target fails.
 local-cross:
-	@$(MAKE) --keep-going $(CROSS_BUILD_TARGETS)
+	@"$(MAKE)" --keep-going $(CROSS_BUILD_TARGETS)
 
 bin/crio.cross.%: .gopathok .explicit_phony
 	@echo "==> make $@"; \
@@ -248,7 +248,7 @@ install.tools: .install.gitvalidation .install.gometalinter .install.md2man .ins
 		git clone https://github.com/ostreedev/ostree $(GOPATH)/src/github.com/ostreedev/ostree ; \
 		cd $(GOPATH)/src/github.com/ostreedev/ostree ; \
 		./autogen.sh --prefix=/usr/local; \
-		$(MAKE) all install; \
+		"$(MAKE)" all install; \
 	fi
 
 .PHONY: \
