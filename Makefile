@@ -26,7 +26,7 @@ PACKAGES ?= $(shell go list -tags "${BUILDTAGS}" ./... | grep -v github.com/kube
 BUILD_INFO := $(shell date +%s)
 
 CROSS_BUILD_TARGETS := \
-	bin/crio.cross.windows.amd64 \
+	bin/crio.cross.windows.amd64.exe \
 	bin/crio.cross.darwin.amd64 \
 	bin/crio.cross.linux.amd64
 
@@ -118,15 +118,15 @@ endif
 	rm -rf _output
 	rm -f docs/*.5 docs/*.8
 	rm -fr test/testdata/redis-image
-	find . -name \*~ -delete
-	find . -name \#\* -delete
 	rm -f bin/crio
 	rm -f bin/crio.cross.*
-	"$(MAKE)" -C conmon clean
-	"$(MAKE)" -C pause clean
 	rm -f test/bin2img/bin2img
 	rm -f test/copyimg/copyimg
 	rm -f test/checkseccomp/checkseccomp
+	"$(MAKE)" -C conmon clean
+	"$(MAKE)" -C pause clean
+	find . -name \*~ -delete
+	find . -name \#\* -delete
 
 # the approach here, rather than this target depending on the build targets
 # directly, is such that each target should try to build regardless if it
@@ -137,8 +137,9 @@ local-cross:
 bin/crio.cross.%: .gopathok .explicit_phony
 	@echo "==> make $@"; \
 	TARGET="$*"; \
+	tail="$${TARGET#*.}"; \
 	GOOS="$${TARGET%%.*}" \
-	GOARCH="$${TARGET##*.}" \
+	GOARCH="$${tail%%.*}" \
 	$(GO) build -i $(LDFLAGS) -tags "containers_image_openpgp btrfs_noversion" -o "$@" $(PROJECT)/cmd/crio
 
 crioimage:
